@@ -15,7 +15,7 @@ export default function App() {
   return (<>
 
     <Navbar/>
-
+   
     <Header />
 
     <main className="container my-5">
