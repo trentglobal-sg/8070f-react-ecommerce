@@ -1,18 +1,23 @@
 import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup'  // all functions from the `yup` package are available in the Yup object
+import { useFlashMessage } from './FlashMessageStore';
+import { useLocation } from 'wouter';
 
 function RegisterPage() {
+
+    const {showMessage} = useFlashMessage();
+    const [_, setLocation] = useLocation();
 
     const validationSchema = Yup.object({
         'name': Yup.string().required("Name is required"),
         'email': Yup.string().email("Please provide a valid email address").required('Email is required'),
         'password': Yup.string()
             .min(4, "Passwords must be at least 4 characters")
-            .matches(
-                /^(?=.*[!@#$%^&*()\-_=+{};:,<.>])(?=.*[A-Z]).+$/,
-                'Must contain at least one special character and one uppercase letter'
-            )
+            // .matches(
+            //     /^(?=.*[!@#$%^&*()\-_=+{};:,<.>])(?=.*[A-Z]).+$/,
+            //     'Must contain at least one special character and one uppercase letter'
+            // )
             .required("Password is required"),
         'confirmPassword': Yup.string().oneOf([Yup.ref('password'), null]).required('Please confirm your password'),
         'salutation': Yup.string().required('Salutation is required'),
@@ -38,7 +43,10 @@ function RegisterPage() {
         // imagine: a RESTFUL API ENDPOINT WITH await axios
         setTimeout(function () {
             formikHelpers.setSubmitting(false); // indicate we have finished processing the submission of the form
-        }, 2000)
+            showMessage("You have been registered!", "success");
+            setLocation("/");
+        }, 500)
+
 
 
     }
