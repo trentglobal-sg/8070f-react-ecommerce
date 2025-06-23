@@ -2,7 +2,7 @@ import { useFlashMessage } from "./FlashMessageStore";
 import { useEffect } from "react";
 
 export default function FlashMessage() {
-    const { getMessage, clearMessage, flashMessage } = useFlashMessage();
+    const { getMessage, clearMessage } = useFlashMessage();
     const message = getMessage();
 
     useEffect(() => {
@@ -18,7 +18,7 @@ export default function FlashMessage() {
             clearTimeout(timer); // stop the timer if the effects run again
         }
 
-    }, [flashMessage]);
+    }, [getMessage, clearMessage]);
 
     return <>
         {
