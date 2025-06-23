@@ -2,7 +2,7 @@
 // when one part of the 'atom' changes it counts as if the entire atom has been changed
 import { atom, useAtom } from 'jotai';
 
-// create an atom
+// create an atom -- this contains the data you want to share
 export const flashMessageAtom = atom({
     message: '',
     type: 'info'   // possible values: info, danger success

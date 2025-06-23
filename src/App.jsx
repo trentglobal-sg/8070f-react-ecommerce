@@ -2,7 +2,6 @@
 import Footer from "./Footer"
 import Navbar from "./Navbar"
 
-
 import "./style.css"
 
 import { Route, Switch } from 'wouter';
@@ -11,10 +10,7 @@ import RegisterPage from "./RegisterPage";
 import HomePage from "./HomePage";
 import FlashMessage from "./FlashMessage";
 
-
-
 export default function App() {
-
 
   return (<>
 
