@@ -1,5 +1,4 @@
 import { useFlashMessage } from "./FlashMessageStore";
-import { useEffect } from "react";
 
 export default function FlashMessage() {
     const { getMessage } = useFlashMessage();

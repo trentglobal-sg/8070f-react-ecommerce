@@ -21,6 +21,7 @@ export const useFlashMessage = () => {
             })
         }
 
+        // 3 seconds later, we will reset the flash message
         setTimeout(()=>{
             clearMessage()
         }, 3000)
