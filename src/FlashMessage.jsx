@@ -2,23 +2,8 @@ import { useFlashMessage } from "./FlashMessageStore";
 import { useEffect } from "react";
 
 export default function FlashMessage() {
-    const { getMessage, clearMessage } = useFlashMessage();
+    const { getMessage } = useFlashMessage();
     const message = getMessage();
-
-    useEffect(() => {
-        console.log("Effect ran")
-        const timer = setTimeout(() => {
-            clearMessage();
-        }, 3000);
-
-        // we can return a CLEANUP FUNCTION for useEffect
-        // the cleanup function is called when the effect triggers again
-        // or when the effect ends
-        return () => {
-            clearTimeout(timer); // stop the timer if the effects run again
-        }
-
-    }, [getMessage, clearMessage]);
 
     return <>
         {

@@ -20,6 +20,10 @@ export const useFlashMessage = () => {
                 'type': type
             })
         }
+
+        setTimeout(()=>{
+            clearMessage()
+        }, 3000)
     }
 
     const clearMessage = () => {
