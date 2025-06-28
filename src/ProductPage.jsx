@@ -2,11 +2,17 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import ProductCard from "./ProductCard";
+import { useCart } from "./CartStore";
+import { useLocation } from "wouter";
 
 export default function ProductPage() {
 
     // store the products in a state
     const [products, setProducts] = useState([]);
+
+    const {addToCart} = useCart();
+
+    const [_, setLocation] = useLocation();
 
     useEffect( () => {
 
@@ -20,6 +26,10 @@ export default function ProductPage() {
 
     }, []); // <-- empty array means run once when the component is mounted (aka, rendered for the first time)
 
+    const handleAddToCart = product=>{
+        addToCart(product);
+        setLocation('/cart');
+    };
 
     const renderProducts = () => {
         const productJSX = [];
@@ -29,6 +39,9 @@ export default function ProductPage() {
                     imageUrl={p.image}
                     price={p.price}
                     name={p.name}
+                    onAddToCart={()=>{
+                       handleAddToCart(p)
+                    }}
                 />
             </div>)
         }
