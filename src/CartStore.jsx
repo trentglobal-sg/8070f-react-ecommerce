@@ -28,7 +28,6 @@ export const useCart = () => {
     */
     const addToCart = (product) => {
 
-
         // check if the product is already in the shopping cart
         const existingCartItem = cart.find(cartItem => cartItem.product_id === product.id);
 
