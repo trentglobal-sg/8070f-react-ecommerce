@@ -1,21 +1,50 @@
 import { atom, useAtom } from 'jotai';
+import { useJwt } from './UserStore';
+import axios from 'axios';
+import { useFlashMessage } from "./FlashMessageStore";
 
 const initialCart = [
-    {
-        "id": 1,
-        "product_id": 1,
-        "quantity": 10,
-        "product_name": "Organic Green Tea",
-        "price": 12.99,
-        "image_url": "https://picsum.photos/id/225/300/200",
-        "description": "Premium organic green tea"
-    }
+
 ];
 
 export const cartAtom = atom(initialCart);
 
 export const useCart = () => {
     const [cart, setCart] = useAtom(cartAtom);
+    const { getJwt } = useJwt();
+    const { showMessage } = useFlashMessage();
+
+    const fetchCart = async () => {
+        const jwt = getJwt();
+        const response = await axios.get(import.meta.env.VITE_API_URL + "/api/cart", {
+            headers: {
+                Authorization: "Bearer " + jwt
+            }
+        })
+            .catch((e) => {
+                console.error(e);
+            });
+        console.log(response.data);
+        setCart(response.data);
+    }
+
+    const updateCart = async (modifiedCart) => {
+        const jwt = getJwt();
+        const cartData = modifiedCart.map(cartItem => ({
+            product_id: cartItem.product_id,
+            quantity: cartItem.quantity
+        }));
+        await axios.put(import.meta.env.VITE_API_URL + "/api/cart", { "cartItems": cartData}, {
+            headers:{
+                Authorization:'Bearer ' + jwt
+            }
+        })
+        .catch(e => {
+            console.error(e);
+            showMessage("Error updating the cart", "danger");
+        })
+        
+    }
 
     /*
       Contract of the product object should be:
@@ -45,15 +74,13 @@ export const useCart = () => {
             }
             const cloned = [...cart, newCartItem];
             setCart(cloned);
+            updateCart(cloned);
         } else {
-
             modifyQuantity(existingCartItem.product_id, existingCartItem.quantity + 1)
         }
-
-
     }
 
-    const modifyQuantity = (product_id, quantity) => {
+    const modifyQuantity = async (product_id, quantity) => {
 
         if (quantity < 1) {
             return;
@@ -64,7 +91,7 @@ export const useCart = () => {
 
         // modifying the cart item's quantity to be its current quantity + 1
         const clonedCartItem = { ...existingCartItem, "quantity": quantity };
-        
+
         // const cloned = cart.map(currentCartItem => {
         //     if (currentCartItem.id !== clonedCartItem.id) {
         //         return currentCartItem
@@ -73,15 +100,17 @@ export const useCart = () => {
         //     }
         // })
 
-        const cloned = cart.map(i => i.id !== clonedCartItem.id ? i : clonedCartItem)
-
-        setCart(cloned)
+        const cloned = cart.map(i => i.id !== clonedCartItem.id ? i : clonedCartItem);
+        updateCart(cloned);
+        await setCart(cloned);
+      
     }
 
     const removeFromCart = (product_id) => {
         const existingCartItem = cart.find(i => i.product_id === product_id);
         const cloned = cart.filter(currentCartItem => currentCartItem.id !== existingCartItem.id)
         setCart(cloned);
+        updateCart(cloned);
     }
 
 
@@ -89,7 +118,8 @@ export const useCart = () => {
         cart,
         addToCart,
         modifyQuantity,
-        removeFromCart
+        removeFromCart,
+        fetchCart
     }
 }
 

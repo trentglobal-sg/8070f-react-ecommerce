@@ -1,10 +1,14 @@
 import { useCart } from "./CartStore";
-import { useJwt } from "./UserStore";
+import { useEffect } from "react";
+
 
 export default function ShoppingCartPage() {
 
-    const { cart, modifyQuantity, removeFromCart } = useCart();
-    const { getJwt } = useJwt();
+    const { cart, modifyQuantity, removeFromCart, fetchCart } = useCart();
+
+    useEffect(()=>{
+        fetchCart();
+    }, []);
 
     return (<>
         <div className="container">

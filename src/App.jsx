@@ -11,6 +11,7 @@ import HomePage from "./HomePage";
 import FlashMessage from "./FlashMessage";
 import ShoppingCartPage from "./ShoppingCartPage";
 import UserLogin from "./Login";
+import Profile from "./Profile";
 
 export default function App() {
 
@@ -26,6 +27,7 @@ export default function App() {
       <Route path="/register" component={RegisterPage} />
       <Route path="/cart" component={ShoppingCartPage}/>
       <Route path="/login" component={UserLogin} />
+      <Route path="/profile" component={Profile} />
     </Switch>
 
 
