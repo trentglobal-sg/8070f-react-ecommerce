@@ -1,8 +1,10 @@
-import { useCart } from "./CartStore"
+import { useCart } from "./CartStore";
+import { useJwt } from "./UserStore";
 
 export default function ShoppingCartPage() {
 
     const { cart, modifyQuantity, removeFromCart } = useCart();
+    const { getJwt } = useJwt();
 
     return (<>
         <div className="container">

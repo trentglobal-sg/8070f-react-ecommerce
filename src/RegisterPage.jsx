@@ -3,6 +3,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup'  // all functions from the `yup` package are available in the Yup object
 import { useFlashMessage } from './FlashMessageStore';
 import { useLocation } from 'wouter';
+import axios from 'axios';
 
 function RegisterPage() {
 
@@ -36,18 +37,30 @@ function RegisterPage() {
     }
 
     // to handle the submission of the form
-    const handleSubmit = (values, formikHelpers) => {
+    const handleSubmit = async (values, formikHelpers) => {
         // formikHelpers is an object that contains useful functions for form processing
         console.log("form values =>", values);
 
-        // imagine: a RESTFUL API ENDPOINT WITH await axios
-        setTimeout(function () {
-            formikHelpers.setSubmitting(false); // indicate we have finished processing the submission of the form
-            showMessage("You have been registered!", "success");
-            setLocation("/");
-        }, 500)
+        // // imagine: a RESTFUL API ENDPOINT WITH await axios
+        // setTimeout(function () {
+        //     formikHelpers.setSubmitting(false); // indicate we have finished processing the submission of the form
+        //     showMessage("You have been registered!", "success");
+        //     setLocation("/");
+        // }, 500)
 
-
+        try {
+             const response = await axios.post(import.meta.env.VITE_API_URL + '/api/users/register', values);
+             if (response.status == 200) {
+                showMessage("Your account has been created", "success");
+                setLocation("/");
+             }
+        } catch (e) {
+            showMessage("Error registering", "error");
+        } finally {
+            formikHelpers.setSubmitting(false);
+            
+        }
+       
 
     }
 
@@ -101,7 +114,7 @@ function RegisterPage() {
                         <div className="mb-3">
                             <label className="form-label">Marketing Preferences</label>
                             <div className="form-check">
-                                <Field className="form-check-input" value="marketing" type="checkbox" id="emailMarketing" name="marketingPreferences" />
+                                <Field className="form-check-input" value="email" type="checkbox" id="emailMarketing" name="marketingPreferences" />
                                 <label className="form-check-label" htmlFor="emailMarketing" >Email Marketing</label>
                             </div>
                             <div className="form-check">
